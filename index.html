@@ -1,0 +1,11 @@
+<textarea id=textbox></textarea>
+<button onclick=onRun()>Run</button>
+<script>
+ function onRun() {
+  try {
+   eval(textbox.value)
+  } catch(err) {
+   alert(JSON.stringify(err)
+  }
+ } 
+</script>
