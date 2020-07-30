@@ -5,7 +5,7 @@
   try {
    eval(textbox.value)
   } catch(err) {
-   alert(JSON.stringify(err))
+   alert(`${err.lineNumber} ${err.message}`)
   }
  } 
 </script>
