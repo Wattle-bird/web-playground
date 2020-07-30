@@ -1,11 +1,27 @@
-<textarea id=textbox></textarea>
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+  textarea {width: 100%; height: 23em}
+  body {background-color: #ddd;}
+  canvas {background-color: #fff;}
+ </style>
+</head>
+<body>
+<textarea id=textbox>
+// textbox.value
+// output.innerHTML = '<em>hello world</em>'
+</textarea>
+<hr>
 <button onclick=onRun()>Run</button>
+<hr>
+<div id=output></div>
 <script>
  function onRun() {
   try {
    eval(textbox.value)
   } catch(err) {
-   alert(`${err.lineNumber} ${err.message}`)
+   alert(`${err.message}`)
   }
  } 
 </script>
+</body>
