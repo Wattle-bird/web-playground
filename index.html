@@ -1,10 +1,19 @@
 <head>
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <style>
-  textarea {width: 100%; height: 23em}
-  body {background-color: #ddd;}
-  canvas {background-color: #fff;}
- </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    textarea {
+        width: 100%;
+        height: 23em
+    }
+
+    body {
+        background-color: #ddd;
+    }
+
+    canvas {
+        background-color: #fff;
+    }
+</style>
 </head>
 <body>
 <textarea id=textbox>
@@ -13,15 +22,48 @@
 </textarea>
 <hr>
 <button onclick=onRun()>Run</button>
+<button onclick=onSave()>Save to Dropbox</button>
+<button onclick=onLoad()>Load from Dropbox</button>
 <hr>
 <div id=output></div>
 <script>
- function onRun() {
-  try {
-   eval(textbox.value)
-  } catch(err) {
-   alert(`${err.message}`)
-  }
- } 
+    function onRun() {
+        try {
+            eval(textbox.value)
+        } catch(err) {
+            alert(`${err.message}`)
+        }
+    } 
+
+    function onSave() {
+        const url = 'data:text/javascript,' + encodeURIComponent(textbox.value);
+        const filename = window.prompt('Filename (because Dropbox wants it first)', 'code.js');
+        const options = {
+            success: () => alert('Saved!'),
+            error: (msg) => alert(`Error: ${msg}`)
+        }
+        Dropbox.save(url, filename, options);
+    }
+
+    function onLoad() {
+        const options = {
+            linkType: 'direct',
+            multiselect: false,
+            extensions: ['.js'],
+            folderselect: false,
+            success: (files) => {
+                const file = window.fetch(files[0].link).then((response) => {
+                    if (!response.ok) {
+                        alert('Error fetching selected file')
+                    } else {
+                        // TODO async all this mess
+                        response.blob().then((blob) => blob.text().then((text) => textbox.value = text));
+                    }
+                })
+            }
+        }
+        Dropbox.choose(options);
+    }
 </script>
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="ueq25aqtmiwdxvh"></script>
 </body>
